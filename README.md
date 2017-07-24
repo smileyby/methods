@@ -327,7 +327,220 @@ var r = a.unshift('?', '@');
 
 Array.of()方法创建一个具有可变数量参数的新数组示例，而不是考虑数组的数量和类型
 
-Array.of()和Array构造函数之间的区别在于处理整数参数：Array.of(7)创建一个具有
+Array.of()和Array构造函数之间的区别在于处理整数参数：Array.of(7)创建一个具有单个元素7的数组，而Array(7)创建一个包含7个undefined元素的数组。
+
+```js
+
+Array.of(7);       // [7]
+Array.of(1,2,3);   // [1,2,3]
+
+Array(7);          // [,,,,,,]
+Array(1,2,3);      // [1,2,3]
+
+```
+
+### array.copyWithin() ？？？
+
+copyWithin()方法潜伏之数组的一部分到统一数组中的另一个位置，并返回它，而不修改其大小
+
+### array.entries()
+
+entries()方法返回一个新1的Array Iterator对象，该对象包含数组中每个索引的键/值对。
+
+```js
+
+var arr = ['a','b','c'];
+var iterator = arr.entries();
+// undefined
+
+console.log(iterator);
+console.log(iterator.next().value);
+// [0,'a']
+console.log(iterator.next().value);
+// [1,'b']
+console.log(iterator.next().value);
+// [2, 'c']
+
+```
+
+### array.every()
+
+every()方法测试数组的所有元素是否都能通过了指定函数的测试
+
+语法：`arr.every(callback[, thisArg])`
+
+```js
+
+function isBigEnough(element, index, array) {
+	return (element >= 10);
+}
+var passed = [12, 5, 8, 130, 44].every(isBigEnough);
+// pass is false
+passed = [12, 54, 18, 130, 44].every(isBigEnough);
+// passed is true
+
+```
+
+### array.fill()
+
+fill()方法用一个固定值填充一个数组中从起始索引到终止索引内的全部元素。
+
+```js
+
+// 语法
+arr.fill(value);
+arr.fill(value, start);
+arr.fill(value, start, end);
+
+var number = [1,2,3];
+number.fill(1);
+
+// results in [1,1,1]
+
+```
+
+### array.filter()
+
+filter()方法创建一个新数组，其包含通过所提供函数实现的测试的所有元素。
+
+```js
+
+function isBigEnough(value) {
+	return value >= 10;
+}
+
+var filtered = [12,5,8,130,44].filter(isBigEnough);
+// filtered is [12, 130, 44]
+
+const isBigEnough = value => value >= 10;
+
+let [...spraed] = [12,5,8,130,44];
+
+let filtered = spraed.filter(isBigEnough);
+// filtered is [12,130,44]
+
+```
+
+### array.find()
+
+find()方法返回数组中满足提供的测试函数的第一个元素的值，否则返回undefined
+
+```js
+
+function isBigEnough(element) {
+	return element >= 15;
+}
+
+[12,5,8,130,44].find(isBigEnough); // 130
+
+```
+
+### array.findIndex()
+
+findIndex()方法返回数组中满足提供测试函数的第一个元素的索引。否则返回-1
+
+```js
+
+function isBigEnough(element){
+	return element >= 15;
+}
+
+[12,5,8,130,44].findIndex(isBigEnough); // 3
+
+```
+
+### array.forEach()
+
+forEach()方法对数组的每个元素执行一次提供的函数
+
+```js
+
+let a = ['a','b','c'];
+a.forEach(function(element){
+	console.log(element);
+});
+// a
+// b
+// c
+
+```
+
+### array.includes()
+
+includes()方法用来判断一个数组是够半酣一个指定的值，如果是，酌情返回true或false
+
+```js
+
+// 语法
+arr.includes(searchElement)
+arr.includes(searchElement, fromIndex)
+
+let a = [1,2,3];
+a.includes(2);
+// true
+
+a.includes(4);
+// false
+
+```
+
+### array.indexOf()
+
+indexOf()方法返回在数组中可以找到一个给定元素的第一个索引，如果不存在则返回-1.
+
+```js
+
+// 语法
+arr.indexOf(searchElement)
+arr.indexOf(searchElement[, fromIndex = 0])
+
+let a = [2, 9, 7, 8, 9]; 
+a.indexOf(2); // 0 
+a.indexOf(6); // -1
+a.indexOf(7); // 2
+a.indexOf(8); // 3
+a.indexOf(9); // 1
+
+if (a.indexOf(3) === -1) {
+  // element doesn't exist in array
+}
+
+```
+
+### array.keys()
+
+keys()方法返回一个新的Array迭代器
+
+```js
+
+let arr = ["a", "b", "c"];
+
+let iterator = arr.keys();
+// undefined
+
+console.log(iterator);
+// Array Iterator {}
+
+console.log(iterator.next()); 
+// Object {value: 0, done: false}
+
+console.log(iterator.next()); 
+// Object {value: 1, done: false}
+
+console.log(iterator.next()); 
+// Object {value: 2, done: false}
+
+console.log(iterator.next()); 
+// Object {value: undefined, done: true}
+
+```
+
+
+
+
+
+
+
 
 
 
