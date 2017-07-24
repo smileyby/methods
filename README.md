@@ -112,6 +112,27 @@ var b = a.reverse();
 
 ```
 
+### array.shift()
+
+shift方法移除数组array中的第一个元素并返回该元素。如果这个数组array是空的，它会返回undefined。**shift通常比pop慢得多**：
+
+```js
+
+var a = ['a', 'b', 'c'];
+var c = a.shift(); // a 是 ['b', 'c'] & c 是 'a'
+
+```
+
+shift可以这样实现：
+
+```js
+
+Array.method('shift', function(){
+	return this.splice(0, 1)[0];
+});
+
+```
+
 ### array.slice(start, end)
 
 **返回值**：一个含有提取元素的**新数组**
@@ -133,6 +154,11 @@ var f = a.slice(-2,-1) // f 是 ['b']
 
 ### array.sort(comparefn)
 
+[冒泡排序法](http://www.cnblogs.com/kkun/archive/2011/11/23/2260280.html)
+
+**注意：**[对于sort具体实现方法，不同浏览器是存在差异的](https://stackoverflow.com/questions/234683/javascript-array-sort-implementation)
+
+
 sort方法对array中的内容进行适当的排序。它不能正确地给出一组数字排序：
 
 ```js
@@ -140,6 +166,11 @@ sort方法对array中的内容进行适当的排序。它不能正确地给出�
 var n = [4, 8, 15, 16, 23, 42];
 n.sort();
 // n 是 [15, 16, 23, 4, 42, 8]
+
+n.sort(function(a,b){
+	return a-b; // 升序
+	// return b-a; 降序
+})；
 
 ```
 
@@ -155,6 +186,152 @@ n.sort(function (a, b) {
 // n 是 [4, 8, 15, 16, 23, 42]
 
 ```
+
+上面这个函数将给数字排序，但它不能给字符串排序。如果我们想要给任何简单值数组排序，则必须要做更多的工作：
+
+```js
+
+var m = ['aa', 'bb', 'a', 4, 8, 15, 16, 23, 42];
+m.sort(function(a, b){
+	if(a === b){
+		return 0;
+	}
+	if(typeof a === typeof b){
+		return a < b ? -1 : 1; 
+	}
+	return typeof a < typeof b ? -1 : 1;
+});
+// m 是 [4, 8, 15, 16, 23, 42, 'a', 'aa', 'bb']
+
+```
+如果大小写不重要，你的比较函数应该在比较运算符之前将他们转化为小写。
+
+如果有一个更智能的比较函数，我们也可以给对象排序。为了在一般情况下让这个事情更容易，我们将编写一个构造比较函数的函数：
+
+```js
+
+var by = function (name) {
+	return function (o, p) {
+		if (typeof o === 'object' && typeof p === 'object' && o && p){
+			a = o[name];
+			b = p[name];
+			if (a === b){
+				return 0;
+			}
+			if (typeof a === typeof b){
+				return a < b ? -1 : 1;
+			}
+		} else {
+			throw {
+				name: 'Error',
+				message: 'Expected an object when sorting by ' + name
+			};		
+		}
+	};
+};
+
+var s = [
+	{first: 'Joe', last: 'Besser'},
+	{first: 'Moe', last: 'Howard'},
+	{first: 'Joe', last: 'Derita'},
+	{first: 'Shemp', last: 'Howard'},
+	{first: 'Larry', last: 'Fine'},
+	{first: 'Curly', last: 'Howard'}
+];
+s.sort(by('first'));
+// s 是 [
+	{first: 'Curly', last: 'Howard'},
+	{first: 'Joe', last: 'Derita'},
+	{first: 'Joe', last: 'Besser'},
+	{first: 'Larry', last: 'Fine'},
+	{first: 'Moe', last: 'Howard'},
+	{first: 'Shemp', last: 'Howard'}
+]
+
+```
+
+sort 方法是不稳定的，所以下面的调用：
+
+```
+
+s.sort(by('first')).sort(by('last'));
+
+```
+
+不能保证产生正常的序列。如果你想基于多个键值进行排序，你需要再次做更多的工作我们可以修改by函数，让其可以接受第二个参数，当主要的键值产生一个匹配的时候，另一个compare方法将被调用以决出高下。
+
+```js
+
+var by = function (name, minor) {
+	return function (o, p) {
+		var a, b;
+		if (o && p && typeof o === 'object' && typeof p === 'object'){
+			a = o[name];
+			b = p[name];
+			if(a === b){
+				return typeof minor === 'function' ? minor(o, p) : 0;
+			}
+			if(typeof a === typeof b){
+				return a < b ? -1 : 1;
+			}
+			return typeof a < typeof b ? -1 : 1;
+		} else {
+			throw {
+				name: 'Error',
+				message: 'Expected am object when sorting by ' +name;
+			};
+		}
+	};
+};
+s.sort(by('last',by('first')));
+// s 是 [
+	{first: 'Joe', last: 'Besser'},
+	{first: 'Joe', last: 'Derita'},
+	{first: 'Larry', last: 'Fine'},
+	{first: 'Curly', last: 'Howard'},
+	{first: 'Moe', last: 'Howard'},
+	{first: 'Shemp', last: 'Howard'}
+]
+
+```
+
+### array.splice(start, deleteCount, item...)
+
+splice方法从array中移除1个或多个元素，并用新的item替换他们。参数start是从数组array中移除元素的开始位置。参数deleteCount是要移除的元素个数。如果有额外的参数，那些item都将插入到所以出元素的位置上。它返回一个包含被移除元素的数组。
+
+splice最主要的用处是从一个数组中删除元素。**千万不要把splice和slice混淆了**
+
+```js
+
+var a = ['a', 'b', 'c'];
+var r = a.splice(1, 1, 'ache', 'bug');
+// a 是 ['a', 'ache', 'bug', 'c']
+// r 是 ['b']
+
+```
+
+## array.unshift(item...)
+
+unshift方法像push方法一样用于将元素添加到数组中，但它是把item插入array的开始部分而不是结尾部分。它返回array的新的长度值：
+
+```js
+
+var a = ['a', 'b', 'c'];
+var r = a.unshift('?', '@');
+// a 是 ['?','@','a','b','c']
+// r 是 5
+
+```
+
+### Array.of()
+
+Array.of()方法创建一个具有可变数量参数的新数组示例，而不是考虑数组的数量和类型
+
+Array.of()和Array构造函数之间的区别在于处理整数参数：Array.of(7)创建一个具有
+
+
+
+
 
 
 
