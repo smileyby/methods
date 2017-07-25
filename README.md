@@ -339,9 +339,26 @@ Array(1,2,3);      // [1,2,3]
 
 ```
 
-### array.copyWithin() ？？？
+### array.copyWithin() 
+
+语法：arr.copyWithin(目标索引,[源开始索引],[结束源索引])
+
+返回值：改变的新数组
 
 copyWithin()方法潜伏之数组的一部分到统一数组中的另一个位置，并返回它，而不修改其大小
+
+```js
+
+[1,2,3,4,5].copyWithin(-2);
+// [1,2,3,1,2]
+
+[1,2,3,4,5].copyWithin(0,3);
+// [4,5,3,4,5]
+
+[1,2,3,4,5].copyWithin(0,3,4);
+// [4,2,3,4,5]
+
+```
 
 ### array.entries()
 
@@ -534,6 +551,259 @@ console.log(iterator.next());
 // Object {value: undefined, done: true}
 
 ```
+
+### array.lastIndexOf()
+
+lastIndexOf()方法返回指定元素（也即有效的javascript值或变量）在数组中的最后一个的索引，如果不存在则返回-1.从数组的后面向前查找，从fromIndex处开始。
+
+语法：arr.lastIndexOf(searchElement[, fromIndex = arr.length - 1])
+
+参数：searchElement---被查找的元素；formIndex---从此位置开始逆向查找。默认为数组的长度减一，即真个数组都被查找。如果该值大于或等于数组的长度，则整个数组会被查找。如果为负值，将其视为从数组末尾向前偏移。即使该值为负值，数组仍然会被从后向前查找。如果该值为负时，其绝对值大于数组长度，则返回-1，即数组不会被查找。
+
+**lastIndexOf使用严格相等（即 ===）比较searchElement和数组中的元素**
+
+```js
+
+var array = [2,5,9,2];
+var index = array.lastIndexOf(2);
+// index is 3
+
+index = array.lastIndexOf(7);
+// index is 7
+
+index = array.lastIndexOf(2,3);
+// index is 3
+
+index = array.lastIndexOf(2,2);
+// index is 0
+
+index = array.lastIndexOf(2,-2);
+// index is 0
+
+index = array.lastIndexOf(2,-1);
+// index is 3
+
+```
+
+### array.map()
+
+语法：
+
+```
+
+let array = arr.map(function callback(surrentValue, index, array) {
+	// return element for new_array
+}[, thisArg])
+
+```
+
+参数：
+
+> callback---生成新数组的函数，使用三个参数：
+> currentValue（callback第一个参数）: 数组中正在处理的当前元素
+> index（callback第二个参数）:数组中正在处理的当前元素的索引
+> array（callback的第三个参数，map方法被调用的数组）
+> thisArg---执行callback函数时使用的this值
+
+map()方法创建一个新数组，其结果是该数组中的每个元素都调用一个提供的函数后返回的结果。
+
+```js
+
+// 使用三个参数
+
+const numbers = [1, 2, 3, 4, 5];
+
+let arr = numbers.map((currentValue, index, array) => {
+    console.log(`currentValue = `, currentValue);
+    console.log(`index = `, index);
+    console.log(`array= `, array);
+    return currentValue * 2;
+}, numbers);
+
+console.log(`arr `, arr);
+
+
+
+let numbers = [1, 5, 10, 15];
+let doubles = numbers.map((x) => {
+   return x * 2;
+});
+
+// doubles is now [2, 10, 20, 30]
+// numbers is still [1, 5, 10, 15]
+
+
+let numbers = [1, 4, 9];
+let roots = numbers.map(Math.sqrt);
+
+// roots is now [1, 2, 3]
+// numbers is still [1, 4, 9]
+
+```
+
+### array.reduce()
+
+语法：
+
+```
+
+array.reduce(function(accumulator, currentValue, currentIndex, array), initialValue)
+
+```
+
+参数：
+
+> callback:执行数组中每个值的函数，包含四个参数
+> --- accumulator 上一次调用回调返回的值，或者是提供的初始值（initialValue）
+> --- currentValue 数组中正在处理的元素
+> --- currentIndex 数据中正在处理的元素的索引，如果提供了initialValue ，从0开始；否则从1开始
+> --- array调用reduce的数组
+> initialValue：可选项，其值用于第一调用callback的第一个参数。如果没有设置初始值，则将数组中的第一个元素作为初始值。空数组调用reduce时没有设置初始值将会报错。
+
+返回值：函数累计处理的结果。
+
+reduce()方法对累加器和数组中的每个元素（从左到右）应用一个函数，将其减少为单个值。
+
+```js
+
+var total = [0,1,2,3].reduce(function(sum,value){
+	return sum + value;
+});
+// total is 6
+
+var flattened = [[0,1],[2,3],[4,5]].reduce(function(a,b){
+	return a.concat(b);
+},[]);
+// flattened is [0,1,2,3,4,5]
+
+```
+
+### array.reduceRight()
+
+reduceRight()方法接受一个函数作为累加器和数组的每个值（从右到左）将其减少为单个值。
+
+语法：`arr.reduceRight(callback[, initialValue])`
+
+```js
+
+left flattened = [
+	[0,1],
+	[2,3],
+	[4,5]
+].reduceRight((a,b) => {
+	return a.concat(b);
+},[]);
+
+// flattened is [4,5,2,3,0,1]
+
+```
+
+### array.some()
+
+some()方法测试数组中的某些元素是否通过由提供的函数实现的测试。
+
+语法：`arr.some(callback[,thisArg])`
+
+```js
+
+const isBiggerThan10 = (element, index, array) => {
+	return element > 10;
+}
+
+[2,5,8,1,4].some(isBiggerThan10);
+// false
+
+[12, 5, 8, 1, 4].some(isBiggerThan10); 
+// true
+
+```
+
+### array.toLocaleString()
+
+toLocaleString()返回一个字符串表示数组中的元素。数组中的元素将使用个字的toLocaleString方法转成字符串，这些字符串将使用一个特定语言环境的字符串（例如一个逗号“，”）隔开
+
+语法：`arr.toLocaleString()`
+
+```js
+
+var number = 1337;
+var date = new Date();
+var myArr = [number, date, 'foo'];
+var str = myArr.toLocaleString();
+console.log(str);
+// 输出 "1,337,2017/7/25 下午8:36:53,foo" 
+// 假定运行在中文（zh-CN）环境，北京时区
+
+```
+
+### array.toSource()
+
+**该特性是非标准的，请尽量不要在生产环境中使用它！**
+
+语法：`array.toSource()`
+
+返回一个字符串，代表该数组的源代码
+
+```js
+
+// 谷歌不支持
+var alpha = new Array('a','b','c');
+alpha.toSource(); // 返回['a','b','c']
+
+```
+
+### array.toString()
+
+toString()返回一个字符串，表示指定的数组及其元素
+
+```js
+
+var monthNames = ['Jan', 'Feb', 'Mar', 'Apr'];
+var myVar = monthNames.toString(); // assigns "Jan,Feb,Mar,Apr" to myVar.
+
+```
+
+### array.values()
+
+values()方法返回一个新的ArrayIterator对象，该对象包含数组每个索引值。
+
+**Chrome未实现**
+
+使用 for...of 循环进行迭代
+
+```js
+
+let arr = ['w', 'y', 'k', 'o', 'p'];
+let eArr = arr.values();
+// 您的浏览器必须支持 for..of 循环
+// 以及 let —— 将变量作用域限定在 for 循环中
+for (let letter of eArr) {
+  console.log(letter);
+}
+
+``` 
+
+另一种迭代方式
+
+```js
+
+let arr = ['w', 'y', 'k', 'o', 'p'];
+let eArr = arr.values();
+console.log(eArr.next().value); // w
+console.log(eArr.next().value); // y
+console.log(eArr.next().value); // k
+console.log(eArr.next().value); // o
+console.log(eArr.next().value); // p
+
+```
+
+
+
+
+
+
+
+
 
 
 
