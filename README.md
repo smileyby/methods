@@ -797,6 +797,146 @@ console.log(eArr.next().value); // p
 
 ```
 
+## Function
+
+**属性**
+
+### function.length
+
+length 属性值明函数的形参个数
+
+length 是函数对象的一个属性值，指该函数有多少个必须要传入的参数，那些已定义了默认值的参数不算在内，比如function(xx = 0)的length是0.与之对比的是，<font color="#387894">arguments.length</font>是函数被调用时实际传参的个数。
+
+```js
+
+console.log(Function.length); // 1
+console.log(function()        {}.length);  // 0
+console.log(function(a)       {}.length);  // 1
+console.log(function(a, b)    {}.length);  // 2
+console.log(function(...args) {}.length);  // 0, rest parameter is not counted
+
+```
+
+
+**方法**
+
+### Function.prototype.apply()
+
+语法： `fun.apply(thisArg, [argsArray])`
+
+
+参数：
+
+> thisArg 在fun函数运行时指定的this值。需要注意的是，指定的this值并不一定是该函数执行时真正的this值，如果这个函数处于<font color="#A52A2A">非严格模式</font>下，则指定为null或undefined时会自动指向全局对象（浏览器中就是window对象），同时值为原始值（数字，字符串，布尔值）的this会指向该原始值的自动包装对象。
+
+> argsArray 一个数组或者类数组对象，其中的数组元素将作为单独的参数传给fun函数。如果该参数的值为null或undefined，则表示不需要传入任何参数。从ECMAScript5开始使用类数组对象。
+
+apply方法调用函数function，传递一个将被绑定到this上的对象和一个可选的参数数组。apply方法被调用在apply调用模式（apply invocation pattern）中。
+
+```js
+
+Function.method('bind', function (that) {
+	// 返回一个函数，调用这个函数就像它是那个对象的方法一样。
+	var method = this,
+		slice  = Array.prototype.slice,
+		args   = slice.apply(arguments, [1]);
+	return function () {
+		return method.apply(that, args.concat(slice,apply(arguments, [0])));
+	} 
+});
+
+var x = function () {
+	return this.value
+}.bind({value: 666});
+alert(x()); // 666
+
+```
+
+**使用apply和内置函数**
+
+聪明的apply用法允许你在某些本来需要写成遍历数组的任务中使用内建的函数。在下面的例子中我们使用Math.max/Math.min来找出数组中的最大/最小值。
+
+```js
+
+// min/max number is an array
+var numbers = [5, 6, 2, 3, 7];
+
+// using Math.min/Math.max spply
+var max = Mtah.max.apply(null, numbers); // This about equal to Math.max(numbers[0],...) or Math.max(5, ,6, ...)
+var min = Math.min.apply(null, numbers);
+
+// vs. simple loop based algorithm
+max = -Infinity, min = +Infinity;
+
+for(var i = 0; i< numbers.length){
+	if(numbers[i] > max){
+		max = numbers[i];
+	}
+	
+	if(numbers[i] < min){
+		min = numbers[i];
+	}
+};
+
+```
+
+### Function.prototype.bind()
+
+bind()方法创建一个新的函数，当被调用时，将其this关键字设置为提供的值，在调用新函数时，在任何提供之前提供一个给定参数序列。
+
+**语法** `fun.bind(thisArg[, arg1[, arg2[, ...]]])`
+
+**参数**
+> thisArg 当绑定函数被调用时，该参数作为原函数运行时的this指向。当使用<font color="#387894">new 操作符</font>调用绑定函数时，该参数无效。
+
+> arg1， arg2... 当绑定函数被调用时，这些参数将至于实参之前传递给被绑定的方法。
+
+创建绑定函数：
+
+bind()最简单的用法是创建一个函数，使这个函数不论怎么调用都有同样的this值。Javascript新手经常犯的一个错误是将方法从对象中拿出来，然后在调用，希望方法中的this是原来的对象。（比如在回调中传入这个方法）如果不做特殊处理的话，一般会丢失原来的对象。从原来的函数和原来的对象创建一个绑定函数，则能很漂亮地解决这个问题：
+
+```js
+
+this.x = 9;
+var module = {
+	x: 81,
+	getX: function() { return this.x; }
+};
+
+module.getX() // 返回 81
+var retrieveX = module.getX;
+retrieveX(); // 返回9， 这种强狂下，"this"指向全局作用域
+
+// 创建一个新函数，将"this"绑定到module对象
+// 新手可能会被全局的x变量和module里的属性x所迷惑
+var boundGetX = retrieveX.bind(module);
+boundGetX(); // 返回81
+
+```
+
+### Function.prototype.call()
+
+call()方法调用一个函数，其具有一个指定的this值和分别地提供的参数
+
+**注意：该方法的作用和<font color="#387894">apply()</font>方法类似，只有一个区别，就是call()方法接受的是若干参数的列表，而apply()方法接受的是一个包含多个参数的数组。**
+
+语法：`fun.call(thisArg[, arg1[, arg2[, ...]]])`
+
+参数：
+
+> thisArg 在fun函数运行时指定的this值。需要注意的是指定的this值并不一定是该函数执行时真正的this值，如果这个函数处于非严格模式下，则指定为null和undefined的this值会自动指向全局对象（浏览器中就是window对象），同时值为原始值（数字，字符串，布尔值）的this会指向该原始值的自动包装对象。
+
+> arg1, arg2, ... 执行的参数列表
+
+使用call方法调用匿名函数
+
+在下例中的for循环内，我们创建了一个匿名函数
+
+
+
+
+
+
 
 
 
