@@ -1060,6 +1060,128 @@ document.writeln(Math.PI.,toString());
 
 ```
 
+### number.toString(radix)
+
+toString()方法把这个number转换成一个字符串。
+
+可选参数radix控制基数。它的值必须在2和36之间。默认的radix是以10为基数的。radix参数最常用的是整数，但是它可以用任意的数字。
+
+在最普通的情况下，number.toString()可以更简单地写为String(number):
+
+```js
+
+document.writeln(Math.PI.toString(2));
+document.writeln(Math.PI.toString(8));
+document.writeln(Math.PI.toString(16));
+document.writeln(Math.PI.toString());
+
+// 结果
+11.00100100011111101101010100010001000010110100011
+301103755242102643
+30243f6a8885a3
+30141592653589793
+
+```
+
+### Number.isFinite()
+
+isFinite()方法用来检测传入的参数是否是一个有穷数（finite number）
+
+语法：`Number.isFinite(value)`
+
+参数： vlaue 要检测有穷性的值
+
+返回值： 一个布尔值表示给定值是否是一个有穷数
+
+```js
+
+Number.isFinite(Inifinity); // false
+NUmber.isFinite(NaN) // false
+Number.isFinite(-Inifinity); // false
+
+Number.isFinite(0); // true
+Number.isFinite(2e64); // true
+
+Number.isFinite('0'); // false, 全局函数 isFinite('0')会返回true
+
+```
+
+### Number.isInteger()
+
+isInteger()方法用来判断给定的参数是否为整数
+
+语法：`Number.isInteger(value)`
+
+参数： value要判断此参数是否为整数
+
+返回值： 判定给定值是否是整数的布尔值
+
+```js
+
+Number.isInteger(0);            // true
+Number.isInteger(1);            // true
+Number.isInteger(-10000);       // true
+Number.isInteger(0.1);          // false
+Number.isInteger(Math.PI);      // false
+Number.isInteger(Infinity);     // false
+Number.isInteger(-Infinity);    // false
+Number.isInteger("10");         // false
+Number.isInteger(true);         // false
+Number.isInteger(false);        // false
+Number.isInteger([1]);          // false
+
+```
+
+### Number.isNaN()
+
+isNaN() 方法确定传递的值是否为NaN和其他类型的Number。它是原始的全局isNaN的更强大的版本
+
+语法： `Number.isNaN(value)`
+
+参数： value要检测是否是NaN的值
+
+返回值：一个布尔值，表示给定的值是否是NaN
+
+```js
+
+Number.isNaN(NaN);        // true
+Number.isNaN(Number.NaN); // true
+Number.isNaN(0 / 0)       // true
+
+// 下面这几个如果使用全局的 isNaN() 时，会返回 true。
+Number.isNaN("NaN");      // false，字符串 "NaN" 不会被隐式转换成数字 NaN。
+Number.isNaN(undefined);  // false
+Number.isNaN({});         // false
+Number.isNaN("blabla");   // false
+
+// 下面的都返回 false
+Number.isNaN(true);
+Number.isNaN(null);
+Number.isNaN(37);
+Number.isNaN("37");
+Number.isNaN("37.37");
+Number.isNaN("");
+Number.isNaN(" ");
+
+```
+
+### Number.isSafeInteger()
+
+isSafeInteger()方法用来判断传入的参数是否是一个“安全证书（safe integer）”。一个安全整数是符合下面条件的整数：
+
+* can be exactly represented as an IEEE-754 double precision number, and
+* whose IEEE-754 representation cannot be the result of rounding any other integer to fit the IEEE-754 representation.
+
+比如，2^53 - 1是一个安全整数，它能被精确表示，在任何IEEE-754舍入模式下，没有其他整数舍入结果为该整数。作为对比，2^53就不是一个安全整数，他能够使用IEEE-754表示，但2^53 + 1不能使用IEEE-754直接表示，在就近舍入和向零舍入中，会被舍入为2^53
+
+安全整数范围为-(2^53 - 1)到(2^53 - 1)之间的整数，包含-(2^53 - 1)到(2^53 - 1)
+
+
+
+
+
+
+
 
 
 
