@@ -914,7 +914,7 @@ boundGetX(); // 返回81
 
 ```
 
-### Function.prototype.call()
+### Function.prototype.call() 
 
 call()方法调用一个函数，其具有一个指定的this值和分别地提供的参数
 
@@ -930,7 +930,138 @@ call()方法调用一个函数，其具有一个指定的this值和分别地提�
 
 使用call方法调用匿名函数
 
-在下例中的for循环内，我们创建了一个匿名函数
+在下例中的for循环内，我们创建了一个匿名函数，通过调用该函数call方法，将每个数组元素作为指定的this值执行了那个匿名函数。这个匿名函数的主要目的是给每个数组元素对象添加一个print方法，这个print方法可以打印出各元素在数组中的正确索引号。当然，这里不是必须得让数组元素作为this值传入那个匿名函数（普通参数就可以了），目的是为了掩饰call用法
+
+```js
+
+var animals = [
+	{species: 'Lion', name: 'King'},
+	{species: 'Whale', name: 'Fail'}
+];
+
+for(var i = 0; i < animals.length; i += 1){
+	(function (i) {
+		this.print = function () {
+			console.log('#' + i + ' ' + this.species + ': ' + this.name);
+		}
+		this.print();
+	}).call(animals[i], i);
+}
+
+```
+
+使用call方法调用函数并且制定上下文的this
+
+在下面的例子中，当调用greet方法的时候，该方法的this值会绑定到i对象
+
+```js
+
+function greet() {
+	var reply = [this.person, 'Is An Awesome', this.role].join(' ');
+	console.log(reply);
+};
+
+var i = {
+	person: 'Douglas Crockford', role: 'Javascript Developer'
+};
+
+greet.call(i); // Douglas Crockford Is An Awesome Javascript Developer
+
+```
+
+### Function.prototype.isGenerator()
+
+<font color="#FF4040">非标准：该特性是非标准的，请尽量不要再生产环境使用它</font>
+
+作用： 判断一个函数是否是一个[生成器](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generators.3a_a_better_way_to_build_Iterators)
+
+语法：`fun.isGenerator()`
+
+```js
+
+function f () {};
+function* g() {
+	yield 42;
+};
+
+console.log("f.isGenerator() = " + f.isGenerator()); // f.isGenerator() = false
+console.log("g.isGenerator() = " + g.isGenerator()); // g.isGenerator() = true
+
+```
+
+### Function.prototype.toSource()
+
+<font color="#FF4040">非标准：该特性是非标准的，请尽量不要再生产环境使用它</font>
+
+作用：返回函数的源代码的字符串表示
+
+语法： `function.toSource()/Function.toSource()`
+
+> toSource方法返回下面的值：
+> 
+> 对于内置的Function对象，toSource返回下面的字符串
+
+```
+
+function Function() {
+    [native code]
+}
+
+```
+
+> 对于自定义函数来说，toSource返回能定义该函数的Javascript源码
+
+### Function.prototype.toString()
+
+作用：toString()方法返回一个表示当前函数源代码的字符串
+
+语法：`function.toString()`
+
+## Number
+
+### number.toExponential(fractionDigits)
+
+toExponential方法把这个number转换成一个指数形式的字符串。
+
+可选参数：fractionDigits控制其小数点后的数字位数。它的值必须在0至20之间。
+
+```js
+
+document.writeln(Math.PI.toExponential(0));
+document.writeln(Math.PI.toExponential(2));
+document.writeln(Math.PI.toExponential(7));
+document.writeln(Math.PI.toExponential(16));
+document.writeln(Math.PI.toExponential());
+
+// 结果
+3e+0
+3.14e+0
+3.1415926535897930e+0
+3.141592653589793e+0
+
+```
+
+### number.toPrecision(precision)
+
+toPrecision() 方法把这个number转换成一个十进制形式的字符串。可选参数precision控制有效数字的位数。它的值必须在0至21之间：
+
+```js
+
+document.writeln(Math.PI.,toString(2));
+document.writeln(Math.PI.,toString(8));
+document.writeln(Math.PI.,toString(16));
+document.writeln(Math.PI.,toString());
+
+// 结果
+11.00100100011111101101010100010001000010110100011
+301103755242102643
+30243f6a8885a3
+30141592653589793
+
+```
+
+
+
 
 
 
