@@ -1167,7 +1167,7 @@ Number.isNaN(" ");
 
 ### Number.isSafeInteger()
 
-isSafeInteger()方法用来判断传入的参数是否是一个“安全证书（safe integer）”。一个安全整数是符合下面条件的整数：
+isSafeInteger()方法用来判断传入的参数是否是一个“安全整数（safe integer）”。一个安全整数是符合下面条件的整数：
 
 * can be exactly represented as an IEEE-754 double precision number, and
 * whose IEEE-754 representation cannot be the result of rounding any other integer to fit the IEEE-754 representation.
@@ -1175,6 +1175,160 @@ isSafeInteger()方法用来判断传入的参数是否是一个“安全证书�
 比如，2^53 - 1是一个安全整数，它能被精确表示，在任何IEEE-754舍入模式下，没有其他整数舍入结果为该整数。作为对比，2^53就不是一个安全整数，他能够使用IEEE-754表示，但2^53 + 1不能使用IEEE-754直接表示，在就近舍入和向零舍入中，会被舍入为2^53
 
 安全整数范围为-(2^53 - 1)到(2^53 - 1)之间的整数，包含-(2^53 - 1)到(2^53 - 1)
+
+### Number.parseFloat()
+
+Nnumber.parseFloat() 方法可以把一个字符串解析成浮点数。该方法与全局的parseFloat()函数相同，并且处于ECMAScript6规范中（用于全局变量的模块化）。
+
+语法：`Number.parseFloat(string)`
+
+参数： string 被解析的字符串
+
+### Number.parseInt()
+
+Number.parseInt()方法可以根据给定的进制数把一个字符串解析成整数
+
+语法： `Number.parseInt(string[, radix])`
+
+> 参数： 
+> 
+> string 被解析的值。如果不是一个字符串，则将其转换成字符串。字符串的开头的空符将会被忽略。
+> 
+> radix 一个整数值，指定转换中采用的基数。总是指定该参数可以保证结果可预测。当忽略该参数时，不同的实现环境可能产生不同的结果。
+
+该方法和全局的parseInt()函数是同一个函数
+
+```js
+
+Number.parseInt === parseInt; // true
+
+```
+
+### Number.prototype.toExponential()
+
+toExponential()方法以指数表示法返回该数值字符串表示形式。
+
+语法： `numObj.toExponential(fractionDigits)`
+
+参数： fractionDigits 可选。一个整数，用来指定小数点后几位数字。默认情况下尽可能多的位数显示数字。
+
+```js
+
+var numObj = 77.1234;
+
+alert("numObj.toExponential() is " + numObj.toExponential()); //输出 7.71234e+1
+
+alert("numObj.toExponential(4) is " + numObj.toExponential(4)); //输出 7.7123e+1
+
+alert("numObj.toExponential(2) is " + numObj.toExponential(2)); //输出 7.71e+1
+
+alert("77.1234.toExponential() is " + 77.1234.toExponential()); //输出 7.71234e+1
+
+alert("77 .toExponential() is " + 77 .toExponential()); //输出 7.7e+1
+
+```
+
+### Number.prototype.toFixed(digits)
+
+toFixed()方法使用定点表示法来格式化一个数 四舍五入
+
+语法： `numObj.toFixed(digits)`
+
+参数： digits 小数点后数字的个数；介于0到20（包括）之间，实现环境可能不支持更大范围。如果忽略该参数，则默认为0.
+
+```js
+
+var numObj = 12345.6789;
+
+numObj.toFixed();         // 返回 "12346"：进行四舍五入，不包括小数部分
+numObj.toFixed(1);        // 返回 "12345.7"：进行四舍五入
+
+numObj.toFixed(6);        // 返回 "12345.678900"：用0填充
+
+(1.23e+20).toFixed(2);    // 返回 "123000000000000000000.00"
+
+(1.23e-10).toFixed(2);    // 返回 "0.00"
+
+2.34.toFixed(1);          // 返回 "2.3"
+
+-2.34.toFixed(1);         // 返回 -2.3 （由于操作符优先级，负数不会返回字符串）
+
+(-2.34).toFixed(1);       // 返回 "-2.3" （若用括号提高优先级，则返回字符串）
+
+```
+
+### Number.prototype.toPrecision()
+
+toPrecision() 方法以指定的精度返回该数值对象的字符串表示。
+
+语法： `numObj.toPrecision(precision)`
+
+参数： precision 可选。一个用来指定有效数个数的整数。
+
+```js
+
+var numObj = 5.123456;
+console.log("numObj.toPrecision()  is " + numObj.toPrecision());  //输出 5.123456
+console.log("numObj.toPrecision(5) is " + numObj.toPrecision(5)); //输出 5.1235
+console.log("numObj.toPrecision(2) is " + numObj.toPrecision(2)); //输出 5.1
+console.log("numObj.toPrecision(1) is " + numObj.toPrecision(1)); //输出 5
+
+// 注意：在某些情况下会以指数表示法返回
+console.log((1234.5).toPrecision(2)); // "1.2e+3"
+
+```
+
+### Number.prototype.toString()
+
+toString() 方法返回指定 Number 对象的字符串表示形式。
+
+语法： `numObj.toString([radix])`
+
+参数： radix 指定要用于数字到字符串的转换的基数(从2到36)。如果未指定 radix 参数，则默认值为 10。
+
+```js
+
+var count = 10;
+
+console.log(count.toString());    // 输出 '10'
+console.log((17).toString());     // 输出 '17'
+console.log((17.2).toString());   // 输出 '17.2'
+
+var x = 6;
+
+console.log(x.toString(2));       // 输出 '110'
+console.log((254).toString(16));  // 输出 'fe'
+
+console.log((-10).toString(2));   // 输出 '-1010'
+console.log((-0xff).toString(2)); // 输出 '-11111111'
+
+```
+
+### Number.prototype.valueOf()
+
+valueOf() 方法返回一个被 Number 对象包装的原始值。
+
+语法： `numObj.valueOf()`
+
+```js
+
+var numObj = new Number(10);
+console.log(typeof numObj); // object
+
+var num = numObj.valueOf();
+console.log(num);           // 10
+console.log(typeof num);    // number
+
+```
+
+
+
+
+
+
+
+
+
 
 
 
