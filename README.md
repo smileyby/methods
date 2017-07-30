@@ -1321,6 +1321,109 @@ console.log(typeof num);    // number
 
 ```
 
+## String
+
+### String.length
+
+length 属性表示一个字符串的长度，空字符串长度为0
+
+```js
+
+var x = "Mozilla";
+var empty = "";
+
+console.log("Mozilla is " + x.length + " code units long");
+// "Mozilla is 7 code units long" 
+
+console.log("The empty string is has a length of " + empty.length);
+// "The empty string is has a length of 0" 
+
+```
+
+### String.prototype.chatAt()
+
+charAt() 方法从一个字符串中返回指定的字符
+
+语法: `str.chatAt(index)`
+
+参数： index 一个介于0和字符串长度减1之间的整数，吐过没有提供索引，chatAt()将使用0。
+
+输出字符串中不同位置的字符
+
+```js
+
+var anyString = "Brave new world";
+
+console.log("The character at index 0   is '" + anyString.charAt(0)   + "'");
+console.log("The character at index 1   is '" + anyString.charAt(1)   + "'");
+console.log("The character at index 2   is '" + anyString.charAt(2)   + "'");
+console.log("The character at index 3   is '" + anyString.charAt(3)   + "'");
+console.log("The character at index 4   is '" + anyString.charAt(4)   + "'");
+console.log("The character at index 999 is '" + anyString.charAt(999) + "'");
+
+// The character at index 0 is 'B'
+// The character at index 1 is 'r'
+// The character at index 2 is 'a'
+// The character at index 3 is 'v'
+// The character at index 4 is 'e'
+// The character at index 999 is ''
+
+```
+
+### String.prototype.chatCodeAt()
+
+charCodeAt() 方法返回0到65535之间的整数，表示给定索引处的utf-16代码单元（在 Unicode 编码单元表示一个单一的 UTF-16 编码单元的情况下，UTF-16 编码单元匹配 Unicode 编码单元。但在——例如 Unicode 编码单元 > 0x10000 的这种——不能被一个 UTF-16 编码单元单独表示的情况下，只能匹配 Unicode 代理对的第一个编码单元）如果你想要整个代码点的值，使用codePointAt()
+
+语法： `str.charCodeAt(index)`
+
+参数： index 一个大于等于0，小于等于字符串长度的整数。如果不是一个数值，则默认为0.
+
+返回值： 返回值是一个表示给定索引处字符的UTF-16代码单元值的数字；如果索引超出范围，则返回NaN
+
+```js
+
+"ABC".charCodeAt(0) // returns 65
+
+```
+
+### String.prototype.concat()
+
+concat() 方法讲一个或多个字符串与原字符串连接合并，形成一个新的字符串并返回
+
+**强烈建议使用副值操作符（+, +=）代替caocat方法。**参看[性能测试](https://jsperf.com/concat-vs-plus-vs-join)
+
+语法： `str.concat(string2, string3[, ..., stringN])`
+
+参数： string2...stringN 和元字符串连接的多个字符串
+
+```js
+
+var hello = "Hello, ";
+console.log(hello.concat("Kevin", " have a nice day.")); /* Hello, Kevin have a nice day. */
+
+```
+
+### String.prototype.indexOf()
+
+indexOf()方法返回调用String对象中第一次出现指定值的左尹，开始在fromIndex进行搜索
+
+语法： `str.indexOf(searchValue[, fromIndex])`
+
+参数： searchValue 一个字符串表示被查找的值， fromIndex 可选，表示调用该方法的字符串中开始查找的位置。可以是任意的整数。默认为0.如果fromIndex < 0 则查找整个字符串。如果fromIndex >= str.length，则该方法返回-1，除非被查找的字符串是一个空字符串，此时返回str.length。
+
+```js
+
+"Blue Whale".indexOf("Blue");     // returns  0
+"Blue Whale".indexOf("Blute");    // returns -1
+"Blue Whale".indexOf("Whale", 0); // returns  5
+"Blue Whale".indexOf("Whale", 5); // returns  5
+"Blue Whale".indexOf("", 9);      // returns  9
+"Blue Whale".indexOf("", 10);     // returns 10
+"Blue Whale".indexOf("", 11);     // returns 10
+
+```
+
+
 
 
 
