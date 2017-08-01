@@ -1423,6 +1423,31 @@ indexOf()方法返回调用String对象中第一次出现指定值的左尹，�
 
 ```
 
+### String.prototype.lastIndexOf(searchValue[, fromIndex])
+
+语法： `str.lastIndexOf(searchValue[, fromIndex])`
+
+参数： 
+> searchValue 一个字符串，被查找的值
+> fromIndex 从调用该方法字符串的此位置处开始查找。可以使任意整数。默认值为str.length。如果为负值，则被看做0.如果fromIndex > str.length，则fromIndex被看做str.length。
+
+lastIndexOf() 方法和indexOf方法类似，只不过它是从该字符串的末尾开始查找而不是从开头
+
+```js
+
+"canal".lastIndexOf("a")   // returns 3
+"canal".lastIndexOf("a",2) // returns 1
+"canal".lastIndexOf("a",0) // returns -1
+"canal".lastIndexOf("x")   // returns -1
+
+"Blue Whale, Killer Whale".lastIndexOf("blue"); // returns -1
+
+``
+
+### String.prototype.localeCompare()
+
+
+
 
 
 
