@@ -1442,9 +1442,321 @@ lastIndexOf() 方法和indexOf方法类似，只不过它是从该字符串的�
 
 "Blue Whale, Killer Whale".lastIndexOf("blue"); // returns -1
 
-``
+```
 
 ### String.prototype.localeCompare()
+
+localeCompare()方法返回一个数字来表示一个参考字符串是否在排序顺序前面或与之给定字符串相同
+
+语法：`refrenceStr.localeCpmpare(compareString[, locales[, options]])`
+
+参数：
+> 查阅[浏览器支持](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare#浏览器支持)部分来确定哪些浏览器locales参数和options参数
+> compareString 用来比较的字符串
+
+返回值：
+> 返回一个数字表示是否**引用字符串**在排序中位于**比较字符串**的前面，后面，或者二者相同。
+> 当**引用字符串**在**比较字符串**前面时返回-1
+> 当**引用字符串**在**比较字符串**后面时返回1
+> 相同位置返回0
+
+**切勿依赖-1或1这样特定的返回值**。不同浏览器之间（以及不同浏览器版本之间）返回的正负数的值各有不同，因为W3C规范中要求返回是正值和负值，而没有规定具体的值。一些浏览器可能返回-1或2或其他一些负的、正的值。
+
+```js
+
+'a'.localeCompare('c');
+// -2 or -1 (or some other negative value)
+
+'check'.localeCompare('against');
+// 2 or 1 (or some other positive value)
+
+'a'.localeCompare('a');
+// 0
+
+var m = ['AAA', 'A', 'aa', 'a', 'Aa', 'aaa'];
+m.sort(function(a, b){
+	return a.localeCompare(b);
+});
+// m(在某些本地环境下)是 ['a', 'A', 'aa', 'Aa', 'aaa', 'AAA']
+
+```
+
+### String.prototype.match()
+
+当一个字符串与正则表达式匹配时，match()方法检索匹配项
+
+语法： `str.match(regexp)`
+
+参数： regexp 一个[正则表达式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp)对象。如果传入一个非正则表达式对象，则会隐式地使用new RegExp(obj)将其转换成为一个[RegExp](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp)。如果你未提供任何参数，直接使用match()那么你会得到一个包含空字符串的Array:[""]。
+
+返回值： array 一个包含了整个匹配结果以及任何括号捕获的匹配结果的Array；如果没有匹配项，则返回[null](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/null)
+
+> 如果正则表达式没有g标志，则str.match()会返回和RegExp.exec()相同的结果。而且返回的Array拥有一个额外的input属性，该属性包含被解析的原始字符串。另外，还拥有一个index属性，该属性表示匹配结果在原始字符串中的索引（以0开始）。
+> 如果正则表达式包含g标志，则该方法返回一个Array，它包含所有匹配的字符串而不是匹配对象。捕获组不会被返回（即不反悔index属性和input属性）。如果没有匹配到，则返回null。
+
+```js
+
+var str = 'For more information, see Chapter 3.4.5.1';
+var re = /see (chapter \d+(\.\d)*)/i;
+var found = str.match(re);
+
+console.log(found);
+// logs [ 'see Chapter 3.4.5.1',
+//        'Chapter 3.4.5.1',
+//        '.1',
+//        index: 22,
+//        input: 'For more information, see Chapter 3.4.5.1' ]
+
+// 'see Chapter 3.4.5.1' 是整个匹配。
+// 'Chapter 3.4.5.1' 被'(chapter \d+(\.\d)*)'捕获。
+// '.1' 是被'(\.\d)'捕获的最后一个值。
+// 'index' 属性(22) 是整个匹配从零开始的索引。
+// 'input' 属性是被解析的原始字符串。
+
+```
+
+match使用全局（global）和忽略大小写（ignore case）标志
+
+```js
+
+var str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+var regexp = /[A-E]/gi;
+var matches_array = str.match(regexp);
+
+console.log(matches_array);
+// ['A', 'B', 'C', 'D', 'E', 'a', 'b', 'c', 'd', 'e']
+
+```
+
+使用match()，不穿参数
+
+```js
+
+var str = 'Nothing will come of nothing';
+str.match(); // return [""]
+
+```
+
+一个非正式表达式对象作为参数
+
+当参数是一个字符串或者一个数字，它使用new RegExp(obj)来隐式转换成一个RegExp。如果它是一个有正号的正数，RegExp()方法忽略正号。
+
+```js
+
+var str1 = "NaN means not a number. Infinity contains -Infinity and +Infinity in JavaScript.",
+    str2 = "My grandfather is 65 years old and My grandmother is 63 years old.",
+    str3 = "The contract was declared null and void.";
+str1.match("number");   // "number" 是字符串。返回["number"]
+str1.match(NaN);        // NaN的类型是number。返回["NaN"]
+str1.match(Infinity);   // Infinity的类型是number。返回["Infinity"]
+str1.match(+Infinity);  // 返回["Infinity"]
+str1.match(-Infinity);  // 返回["-Infinity"]
+str2.match(65);         // 返回["65"]
+str2.match(+65);        // 有正号的number。返回["65"]
+str3.match(null);       // 返回["null"]
+
+```
+
+### String.prototype.replace() **☆☆☆☆☆**
+
+replace()方法返回一个替换值替换一些或所有匹配的魔石的新字符串。魔石可以使一个字符串或者一个正则表达式，替换值可以是一个字符串或者一个每次匹配都要调用的函数。
+
+语法：`str.replace(regexp|substr, newSubstr|function)`
+
+参数： 
+> regexp(pattern) 一个RegExp对象或者字面量。该正则所匹配的内容会被第二个参数的返回值替换掉。
+> substr(pattern) 一个要被newSubstr替换的字符串。其被视为一个字符串，而不是一个正则表达式。仅仅是第一个匹配会被替换。
+> newSubStr(replacement)用于替换掉第一个参数在元字符串中的匹配部分的字符串。该字符串中可以内插一些特殊的变量名。
+> function(replacement) 一个用来创建新字字符串的函数，该函数的返回值将被替换掉第一个参数匹配的结果
+
+返回值： 一部分或全部匹配由替代模式所取代的新的字符串。
+
+将newString变成'abc - 12345 - #$*%'：
+
+```js
+
+function replacer(match, p1, p2, p3, offset, string) {
+  // p1 is nondigits, p2 digits, and p3 non-alphanumerics
+  return [p1, p2, p3].join(' - ');
+}
+var newString = 'abc12345#$*%'.replace(/([^\d]*)(\d*)([^\w]*)/, replacer);
+
+``` 
+
+### String.prototype.search()
+
+search()方法执行正则表达式和String对象之间的一个搜索匹配
+
+语法： `str.search(regexp)`
+
+参数： regexp 一个正则表达式对象。如果传入一个非正则对象，则会使用new RegExp(obj)隐式地将其转换为正则表达式对象。
+
+返回值： 如果匹配成功，则search()返回正则表达式在字符串中首次匹配项的索引。否则，返回-1。
+
+```js
+
+function testinput(re, str){
+	var midstring;
+	if (str.search(re) != -1){
+		midstring = "contains";
+	} else {
+		midstring = "does not contain";
+	}
+	console.log(str + midstring + re);
+}
+
+```
+
+### String.prototype.slice()
+
+slice()方法提取一个字符串的一部分，并返回一个新的字符串
+
+语法： `str.slice(beginSlice[, endSlice])`
+
+参数：
+> beginSlice 从该索引（以0为基数）处开始提取原字符串中的字符。如果值为负值，会被当做sourceLength + beginSlice看待，这里的sourceLentgh是字符串的长度（例如，如果beginSlice是-3则看做是：sourceLength - 3）
+> endSlice 可选。在改索引（以0为基数）处结束提取字符串。如果省略该参数，slice会一直提取到字符串的末尾。如果该参数为负数，则被看做是sourceLength + endSlice，这里的sourceLength 就是字符串的长度
+
+```js
+
+var str1 = 'The morning is upon us.';
+var str2 = str1.slice(4, -2);
+
+console.log(str2); // OUTPUT: morning is upon u
+
+var str = 'The morning is upon us.';
+str.slice(-3);     // returns 'us.'
+str.slice(-3, -1); // returns 'us'
+str.slice(0, -1);  // returns 'The morning is upon us'
+
+```
+
+### String.prototype.split()
+
+split()方法将一个String对象分割为字符串数组，通过将字符串分成字符串
+
+语法： `str.split([spearator[, limit]])`
+
+参数： 
+> separtor 指定用来分割字符串的字符。separtor可以是一个字符串或正则表达式。如果忽略separtor，则返回整个字符串的数组形式。如果separtor是一个空字符串，则str将会把原字符串的数组形式返回。
+> limit 一个整数，限定返回的分割片段数量。split方法仍然分割每一个匹配的speator，但返回的数组只会截取最多limit个元素
+
+```js
+
+function splitString(stringToSplit, separator) {
+  var arrayOfStrings = stringToSplit.split(separator);
+
+  console.log('The original string is: "' + stringToSplit + '"');
+  console.log('The separator is: "' + separator + '"');
+  console.log("The array has " + arrayOfStrings.length + " elements: ");
+
+  for (var i=0; i < arrayOfStrings.length; i++)
+    console.log(arrayOfStrings[i] + " / ");
+}
+
+var tempestString = "Oh brave new world that has such people in it.";
+var monthString = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
+
+var space = " ";
+var comma = ",";
+
+splitString(tempestString, space);
+splitString(tempestString);
+splitString(monthString, comma);
+
+The original string is: "Oh brave new world that has such people in it."
+The separator is: " "
+The array has 10 elements: Oh / brave / new / world / that / has / such / people / in / it. /
+
+The original string is: "Oh brave new world that has such people in it."
+The separator is: "undefined"
+The array has 1 elements: Oh brave new world that has such people in it. /
+
+The original string is: "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"
+The separator is: ","
+The array has 12 elements: Jan / Feb / Mar / Apr / May / Jun / Jul / Aug / Sep / Oct / Nov / Dec /
+
+```
+
+移除字符串中的空格
+
+```js
+
+var names = "Harry Trump ;Fred Barney; Helen Rigby ; Bill Abel ;Chris Hand ";
+
+console.log(names);
+
+var re = /\s*;\s*/;
+var nameList = names.split(re);
+
+console.log(nameList);
+
+// Harry Trump ;Fred Barney; Helen Rigby ; Bill Abel ;Chris Hand
+// Harry Trump,Fred Barney,Helen Rigby,Bill Abel,Chris Hand
+
+```
+
+限制返回值中分割元素的数量
+
+```js
+
+var myString = "Hello World. How are you doing?";
+var splits = myString.split(" ", 3);
+
+console.log(splits);
+
+```
+
+捕获括号
+
+```js
+
+var myString = "Hello 1 word. Sentence number 2.";
+var splits = myString.split(/(\d)/);
+
+console.log(splits);
+
+// [ "Hello ", "1", " word. Sentence number ", "2", "." ]
+
+```
+
+### String.prototype.substring()
+
+substring()用法和slice方法一样，只是它不能处理负数。没有任何理由去使用substring方法。请使用slice替代它。
+
+### String.prototype.toLocaleLowerCase()
+
+toLocaleLowerCase()方法返回一个新字符串，它使用本地化的规则把这个string中的所有字母转换成小写格式。这方法主要是在土耳其语上，因为在土耳其语中'I'转换为'l'，而不是'i'
+
+### String.prototype.toLocalseUpperCase()
+
+toLocaleUpperCase()方法返回一个新字符串，它使用本地化的规则把这个string中的所有字母转换为大写格式。这个方法主要是用在土耳其语上，因为在土耳其语'i'转换为'I',而不是'I'
+
+### String.prototype.toLowerCase()
+
+toLowerCase()方法返回一个新的字符串，这string中的所有字母都被转换为小写格式格式。
+
+### String.prototype.toUpperCase()
+
+toUpperCase()方法返回一个新的字符串，这个string中的所有字母都被转化为大写格式。
+
+### String.prototype.fromCharCode()
+
+String.fromCharCode() 函数从一串数字中返回一个字符串
+
+```js
+
+var a = String.fromCharCode(67, 97, 166);
+// a 是'Cat'
+
+```
+
+
+
+
+
+
+
 
 
 
