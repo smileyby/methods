@@ -1751,6 +1751,227 @@ var a = String.fromCharCode(67, 97, 166);
 
 ```
 
+### String.fromCodePoint()
+
+String.fromCodePoint()静态方法返回使用指定的代码点序列创建的字符串
+
+语法： `String.fromCodePoint(num1[, ...[, numN]])`
+
+参数： num1, ..., numN 一串Unicode编码
+
+异常： RengeError 如果传入无效的Uincode编码，将会抛出一个RangeError（例如："RengeError:NaN is not a valid code point"）。
+
+说明： 因为fromCodePoint()是String的一个静态方法，所以只能通过String.fromCodePoint() 这样的方式来使用，不能再你创建的String对象实例上直接调用。
+
+```js
+
+String.fromCodePoint(42);       // "*"
+String.fromCodePoint(65, 90);   // "AZ"
+String.fromCodePoint(0x404);    // "\u0404"
+String.fromCodePoint(0x2F804);  // "\uD87E\uDC04"
+String.fromCodePoint(194564);   // "\uD87E\uDC04"
+String.fromCodePoint(0x1D306, 0x61, 0x1D307) // "\uD834\uDF06a\uD834\uDF07"
+
+String.fromCodePoint('_');      // RangeError
+String.fromCodePoint(Infinity); // RangeError
+String.fromCodePoint(-1);       // RangeError
+String.fromCodePoint(3.14);     // RangeError
+String.fromCodePoint(3e-2);     // RangeError
+String.fromCodePoint(NaN);      // RangeError
+
+// String.fromCharCode()方法不能单独获取在高代码点位上的字符
+// 另一方面，下列的示例中，返回4字节，也可以返回2字节的字符
+// （即，它可以返回单独的字符，使用长度2代替1！）
+console.log(String.fromCodePoint(0x2f804));  // or 194564 in decimal
+
+```
+
+### String.prototype.anchor()
+
+anchor()方法创建一个<a>html锚元素，被用作超文本链接靶标（hypertext target）。
+
+语法： `str.anchor(name)`
+
+参数： name 一个字符串，表示被创建的标签的name属性
+
+描述： 
+
+> 使用anchor方法能够以变成方式在一个文档中创建和展现一个锚链接
+> 语法上来讲，字符串表示你想让用户看到的文本。name字符串参数表示<a>元素的name属性
+> 使用anchor方法创建的锚链接（anchors）将会成为[document.anchors](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/anchors)数组的元素。
+
+```js
+
+var myString = 'Table of Contents';
+document.body.innerHTML = myString.anchor("contents_anchor");
+
+//将会输出
+// <a name="contents_anchor">Table of Contents</a>
+
+```
+
+### String.prototype.bold()
+
+bold()方法会创建HTML元素“b”，并将字符串加粗展示
+
+语法：`str.bold()`
+
+返回值：包含HTML元素“b”的字符串
+
+```js
+
+var worldString = 'Hello, world';
+
+console.log(worldString.blink());   // <blink>Hello, world</blink>
+console.log(worldString.bold());    // <b>Hello, world</b>
+console.log(worldString.italics()); // <i>Hello, world</i>
+console.log(worldString.strike());  // <strike>Hello, world</strike>
+
+```
+
+### String.prototype.startsWith()
+
+<font color="#4d9f0c">该属性术语ECMAScript 2015 （ES6）规范，在使用时请注意浏览器兼容性。</font>
+
+startsWith()方法用来判断当前字符串是否是以另外一个给定的子字符串“开头”，根据判断结果返回true或false
+
+语法： str.startWith(searchString[, position]);
+
+参数：
+> searchString 要搜索的子字符串
+> position 在str中搜索searchString的开始位置，默认值为0，就是真正的字符串的开头处
+
+```js
+
+var str = "To be, or not to be, that is the question.";
+
+alert(str.startsWith("To be"));         // true
+alert(str.startsWith("not to be"));     // false
+alert(str.startsWith("not to be", 10)); // true
+
+```
+
+
+### String.prototype.endsWith()
+
+<font color="#4d9f0c">该属性术语ECMAScript 2015 （ES6）规范，在使用时请注意浏览器兼容性。</font>
+
+endsWith()方法用来判断当前字符串是否是以另外一个给定的子字符串“结尾”，根据判断结果返回true或false
+
+语法： `str.endsWith(searchString[, position]);`
+
+参数： searchString 要搜索的子字符串 position 在str搜索searchString的结束位置，默认为str.length，也就是真正的字符串结尾处。
+
+```js
+
+var str = "To be, or not to be, that is the question.";
+
+alert( str.endsWith("question.") );  // true
+alert( str.endsWith("to be") );      // false
+alert( str.endsWith("to be", 19) );  // true
+alert( str.endsWith("To be", 5) );   // true
+
+```
+
+### String.prototype.includes()
+
+includes()方法用于判断一个字符串是否包含另一个字符串中，根据情况返回true或false
+
+语法： `str.includes(searchString[, position])`
+
+参数： 
+> searchString 要在此字符串中搜索的字符串
+> position 可选。从当前字符串的那个索引位置开始搜寻子字符串；默认为0
+
+返回值： 如果当前字符串包含被搜索的字符串，就返回true；否则，返回false
+
+```js
+
+var str = 'To be, or not to be, that is the question.';
+
+console.log(str.includes('To be'));       // true
+console.log(str.includes('question'));    // true
+console.log(str.includes('nonexistent')); // false
+console.log(str.includes('To be', 1));    // false
+console.log(str.includes('TO BE'));       // false
+
+```
+
+### String.prototype.repeat()
+
+repeat()构造并返回一个新字符串，该字符串包含被连接在一起的指定数量的字符串的副本。
+
+语法： `str.repeat(count)`
+
+```js
+
+"abc".repeat(-1)     // RangeError: repeat count must be positive and less than inifinity
+"abc".repeat(0)      // ""
+"abc".repeat(1)      // "abc"
+"abc".repeat(2)      // "abcabc"
+"abc".repeat(3.5)    // "abcabcabc" 参数count将会被自动转换成整数.
+"abc".repeat(1/0)    // RangeError: repeat count must be positive and less than inifinity
+
+({toString : () => "abc", repeat : String.prototype.repeat}).repeat(2)   
+//"abcabc",repeat是一个通用方法,也就是它的调用者可以不是一个字符串对象.
+
+```
+
+### String.prototype.toString()
+
+toString()方法返回指定对象的字符串形式
+
+语法： `str.toString()`
+
+String对象覆盖了Object对象的toString方法；并没有集成Object.toString()。对于String对象toString方法返回该对象的字符串形式，和String.prototype.valueOf()方法返回一样
+
+```js
+
+var x = new String("Hello world");
+
+alert(x.toString())      // 输出 "Hello world"
+
+```
+
+### String.prototype.trim()
+
+trim()方法会从一个字符串的两端删除空白字符。在这个上下文中的空白字符时所有空白字符（space，tab，no-break space等）以及所有行终止符字符（如LF，CR）
+
+语法： `str.trim()`
+
+trim()方法并不影响原字符串本身，它返回的是一个新的字符串。
+
+```js
+
+var orig = '   foo   ';
+console.log(orig.trim()); // 'foo'
+
+// 另一个.trim()例子
+var orig = 'foo   ';
+console.log(o)
+
+```
+
+### String.prototype.valueOf()
+
+valueOf()方法返回一个String对象的原始值
+
+语法：`str.valueOf()`
+
+String对象的valueOf()方法返回一个String对象的原始值。该值等同于String.prototype.toString()。该方法通常在JavaScript内部被调用，而不是在代码里显示调用。
+
+```js
+
+var x = new String('Hello World');
+alert(x.valueOf()) // 'Hello World'
+
+```
+
+
+
+
+
+
 
 
 
